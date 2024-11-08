@@ -4,17 +4,16 @@ from fastapi import HTTPException
 
 from app.schemas.claims_schema import NewClaimRequest, ClaimRequest, ClaimResponse
 from app.exceptions import BaseHTTPException, InternalServerError, NotFound
+from app.services import ClaimsService
 
 
 class ClaimsController:
     def __init__(self):
-        pass
+        self.service = ClaimsService()
 
     def create(self, new_claim: NewClaimRequest) -> ClaimResponse:
         try:
-            # TODO: llamar a la capa de servicio para que gestione la acción correspondiente
-            # Retornar data de ejemplo
-            return ClaimResponse(id=1, **new_claim.model_dump())
+            return self.service.create(new_claim)
         except BaseHTTPException as ex:
             # TODO: implementar logging
             raise ex
@@ -24,9 +23,7 @@ class ClaimsController:
 
     def get_list(self, limit: int, offset: int) -> List[ClaimResponse]:
         try:
-            # TODO: llamar a la capa de servicio para que gestione la acción correspondiente
-            # Retornar data de ejemplo
-            return []
+            return self.service.get_list(limit, offset)
         except BaseHTTPException as ex:
             # TODO: implementar logging
             raise ex
@@ -37,8 +34,7 @@ class ClaimsController:
 
     def get_by_id(self, id: int) -> ClaimResponse:
         try:
-            # Retornar data de ejemplo
-            return ClaimResponse(id=id)
+            return self.service.get_by_id(id)
         except BaseHTTPException as ex:
             # TODO: implementar logging
             raise ex
@@ -48,8 +44,7 @@ class ClaimsController:
 
     def update(self, id: int, new_data: ClaimRequest) -> ClaimResponse:
         try:
-            # Retornar data de ejemplo
-            return ClaimResponse(id=id)
+            return self.service.update(id, new_data)
         except BaseHTTPException as ex:
             # TODO: implementar logging
             raise ex
@@ -58,4 +53,11 @@ class ClaimsController:
             raise InternalServerError("algo salio mal")
 
     def delete(self, id: int) -> None:
-        pass
+        try:
+            self.service.delete(id)
+        except BaseHTTPException as ex:
+            # TODO: implementar logging
+            raise ex
+        except Exception:
+            # TODO log: Error no contemplado en ClaimsController.delete
+            raise InternalServerError("algo salio mal")
