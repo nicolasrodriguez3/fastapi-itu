@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 from fastapi import HTTPException
@@ -7,57 +8,71 @@ from app.exceptions import BaseHTTPException, InternalServerError, NotFound
 from app.services import ClaimsService
 
 
+logger = logging.getLogger(__name__)
+
+
 class ClaimsController:
     def __init__(self):
         self.service = ClaimsService()
 
     def create(self, new_claim: NewClaimRequest) -> ClaimResponse:
         try:
+            logger.debug(f"Nuevo reclamo: {new_claim}")
             return self.service.create(new_claim)
         except BaseHTTPException as ex:
-            # TODO: implementar logging
-            raise ex
+            logger.error(f'Error al procesar request, status code {ex.status_code}: {ex.description}')
+            self.__handler_http_exception(ex)
         except Exception:
-            # TODO log: Error no contemplado en ClaimsController.create
+            logger.critical(f'Error no contemplado en {__name__}.create()')
             raise InternalServerError("algo salio mal")
 
     def get_list(self, limit: int, offset: int) -> List[ClaimResponse]:
         try:
             return self.service.get_list(limit, offset)
         except BaseHTTPException as ex:
-            # TODO: implementar logging
-            raise ex
+            logger.error(f'Error al procesar request, status code {ex.status_code}: {ex.description}')
+            self.__handler_http_exception(ex)
         except Exception:
-            # TODO log: Error no contemplado en ClaimsController.get_list
+            logger.critical(f'Error no contemplado en {__name__}.get_list()')
             raise InternalServerError("algo salio mal")
-
 
     def get_by_id(self, id: int) -> ClaimResponse:
         try:
             return self.service.get_by_id(id)
         except BaseHTTPException as ex:
-            # TODO: implementar logging
-            raise ex
+            logger.error(f'Error al procesar request, status code {ex.status_code}: {ex.description}')
+            self.__handler_http_exception(ex)
         except Exception:
-            # TODO log: Error no contemplado en ClaimsController.get_by_id
+            logger.critical(f'Error no contemplado en {__name__}.get_by_id()')
             raise InternalServerError("algo salio mal")
 
     def update(self, id: int, new_data: ClaimRequest) -> ClaimResponse:
         try:
             return self.service.update(id, new_data)
         except BaseHTTPException as ex:
-            # TODO: implementar logging
-            raise ex
+            logger.error(f'Error al procesar request, status code {ex.status_code}: {ex.description}')
+            self.__handler_http_exception(ex)
         except Exception:
-            # TODO log: Error no contemplado en ClaimsController.update
+            logger.critical(f'Error no contemplado en {__name__}.update()')
             raise InternalServerError("algo salio mal")
 
     def delete(self, id: int) -> None:
         try:
             self.service.delete(id)
         except BaseHTTPException as ex:
-            # TODO: implementar logging
-            raise ex
+            logger.error(f'Error al procesar request, status code {ex.status_code}: {ex.description}')
+            self.__handler_http_exception(ex)
         except Exception:
-            # TODO log: Error no contemplado en ClaimsController.delete
+            logger.critical(f'Error no contemplado en {__name__}.delete()')
             raise InternalServerError("algo salio mal")
+
+    def __handler_http_exception(self, ex: BaseHTTPException) -> HTTPException:
+        if ex.status_code >= 500:
+            logger.critical(
+                f"Error en el servidor con status code {ex.status_code}: {ex.description}"
+            )
+        else:
+            logger.error(f"Error {ex.status_code}: {ex.description}")
+            
+        raise ex
+

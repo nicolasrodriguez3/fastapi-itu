@@ -4,9 +4,6 @@ from app.schemas.claims_schema import ClaimRequest, ClaimResponse, NewClaimReque
 
 
 class ClaimsService:
-    
-    
-    
     def __init__(self):
         # todo: instanciar capa de repositorio
         pass
