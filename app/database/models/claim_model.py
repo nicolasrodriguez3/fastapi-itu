@@ -5,5 +5,7 @@ from .base_model import BaseModel
 
 
 class ClaimModel(BaseModel):
+    __tablename__ = "claims"
+    
     description: Mapped[str] = mapped_column(String)
     status: Mapped[str] = mapped_column(String)
