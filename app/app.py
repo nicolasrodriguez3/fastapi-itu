@@ -2,10 +2,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from .api import router
-from .database import database_connection
+from .database import database_connection, create_table
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # if database_connection.connect():
+        # create_table()
     database_connection.connect()
     yield
     database_connection.disconnect()

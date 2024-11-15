@@ -28,11 +28,14 @@ class ClaimsController:
 
     def get_list(self, limit: int, offset: int) -> List[ClaimResponse]:
         try:
+    
             return self.service.get_list(limit, offset)
         except BaseHTTPException as ex:
+            print("asd")
             logger.error(f'Error al procesar request, status code {ex.status_code}: {ex.description}')
             self.__handler_http_exception(ex)
-        except Exception:
+        except Exception as ex:
+            print(ex)
             logger.critical(f'Error no contemplado en {__name__}.get_list()')
             raise InternalServerError("algo salio mal")
 
