@@ -1,1 +1,2 @@
 from .claims_repository import ClaimsRepository
+from .users_repository import UsersRepository

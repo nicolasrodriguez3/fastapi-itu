@@ -5,6 +5,11 @@ class Settings(BaseSettings):
     PORT: int = 8000
     DEV: bool = False
     
+    # JWT
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRATION_TIME_MINUTES: int = 60
+    
     # Database
     DB_CONN: str
 

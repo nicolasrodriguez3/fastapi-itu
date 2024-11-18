@@ -1,8 +1,8 @@
 from typing import Annotated, List
 from fastapi import APIRouter, Path, Query
 
-from app.schemas.claims_schema import ClaimRequest, NewClaimRequest, ClaimResponse
-from app.controller.claims_controller import ClaimsController
+from app.schemas import ClaimRequest, NewClaimRequest, ClaimResponse
+from app.controller import ClaimsController
 
 router = APIRouter(prefix="/claims")
 controller = ClaimsController()

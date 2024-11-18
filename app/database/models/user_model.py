@@ -29,4 +29,3 @@ class UserModel(BaseModel):
         return bcrypt.checkpw(
             password.encode("utf-8"), self.encrypted_password.encode("utf-8")
         )
-

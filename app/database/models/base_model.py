@@ -11,3 +11,9 @@ class BaseModel(DeclarativeBase):
     updated_at: Mapped[datetime] = mapped_column(
         default=datetime.now, onupdate=datetime.now, nullable=False
     )
+
+    def to_dict(self) -> dict:
+        return {
+            column.name: getattr(self, column.name)
+            for column in self.__class__.__table__.columns
+        }
