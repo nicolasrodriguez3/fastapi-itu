@@ -32,7 +32,13 @@ class UsersRepository:
         user = self.__get_one(user_id)
         if user is None:
             return None
-        return user.to_dict
+        return user.to_dict()
+    
+    def get_by_username(self, username: str) -> dict | None:
+        user = self.db.query(UserModel).filter(UserModel.username == username).first()
+        if user is None:
+            return None
+        return user.to_dict()
 
     def update(self, user_id: int, new_data: dict) -> dict | None:
         user = self.__get_one(user_id)
@@ -42,7 +48,7 @@ class UsersRepository:
             setattr(user, key, value)
         self.db.commit()
         self.db.refresh(user)
-        return user.to_dict
+        return user.to_dict()
 
     def delete(self, user_id: int) -> bool:
         user = self.__get_one(user_id)
