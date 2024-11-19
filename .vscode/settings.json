@@ -9,6 +9,21 @@
 			"database": "claims_db",
 			"username": "root",
 			"password": "root"
+		},
+		{
+			"pgOptions": {
+				"ssl": {
+					"rejectUnauthorized": true
+				}
+			},
+			"previewLimit": 50,
+			"server": "dpg-csuc5bhopnds739vopk0-a.oregon-postgres.render.com",
+			"port": 5432,
+			"driver": "PostgreSQL",
+			"name": "claims-render",
+			"database": "claims_db_2j5c",
+			"username": "root",
+			"password": "aq8lnwSGt7YyEi8cNgBtHnu9dxjioIS8"
 		}
 	]
 }

@@ -6,9 +6,9 @@ from .database import database_connection, create_table
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # if database_connection.connect():
-    #     create_table()
-    database_connection.connect()
+    if database_connection.connect():
+        create_table()
+    # database_connection.connect()
     yield
     database_connection.disconnect()
 

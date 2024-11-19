@@ -1,8 +1,6 @@
 import logging
 from typing import List
 
-from fastapi import HTTPException
-
 from app.exceptions import (
     BadRequest,
     BaseHTTPException,
@@ -88,7 +86,7 @@ class UsersController:
             logger.critical(f"Error no contemplado en {__name__}.delete()")
             raise InternalServerError("algo salio mal")
 
-    def __handler_http_exception(self, ex: BaseHTTPException) -> HTTPException:
+    def __handler_http_exception(self, ex: BaseHTTPException):
         if ex.status_code >= 500:
             logger.critical(
                 f"Error en el servidor con status code {ex.status_code}: {ex.description}"

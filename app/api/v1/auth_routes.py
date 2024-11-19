@@ -1,11 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.exceptions import BadRequest
 from app.schemas import RegisterUser, LoginUser, TokenResponse
+from app.controller import AuthController
 
 router = APIRouter(prefix="/users")
-# controller = AuthController()
+controller = AuthController()
 
 
 @router.post(
@@ -17,7 +18,7 @@ router = APIRouter(prefix="/users")
     }
 )
 async def register(new_user: RegisterUser) -> TokenResponse:
-    return
+    return controller.register(new_user)
 
 @router.post(
     "/login",
@@ -26,6 +27,6 @@ async def register(new_user: RegisterUser) -> TokenResponse:
         400: {"description": BadRequest.description}
     }
 )
-async def login(credentials: OAuth2PasswordRequestForm) -> TokenResponse:
-    return
+async def login(credentials: OAuth2PasswordRequestForm = Depends()) -> TokenResponse:
+    return controller.login(credentials)
 

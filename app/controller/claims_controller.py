@@ -24,7 +24,7 @@ class ClaimsController:
             self.__handler_http_exception(ex)
         except Exception as ex:
             logger.critical(f'Error no contemplado en {__name__}.create()')
-            raise InternalServerError("algo salio mal", ex)
+            raise InternalServerError("algo salio mal")
 
     def get_list(self, limit: int, offset: int) -> List[ClaimResponse]:
         try:
@@ -68,7 +68,7 @@ class ClaimsController:
             logger.critical(f'Error no contemplado en {__name__}.delete()')
             raise InternalServerError("algo salio mal")
 
-    def __handler_http_exception(self, ex: BaseHTTPException) -> HTTPException:
+    def __handler_http_exception(self, ex: BaseHTTPException):
         if ex.status_code >= 500:
             logger.critical(
                 f"Error en el servidor con status code {ex.status_code}: {ex.description}"

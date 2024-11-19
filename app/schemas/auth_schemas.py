@@ -10,6 +10,7 @@ class RegisterUser(BaseModel):
     username: str
     password: str
     email: EmailStr
+    role: RoleEnum = RoleEnum.USER
 
 
 class TokenResponse(BaseModel):
@@ -21,3 +22,9 @@ class TokenResponse(BaseModel):
 class LoginUser(BaseModel):
     username: str
     password: str
+
+
+class DecodedJwt(BaseModel):
+    user_id: int
+    role: RoleEnum
+    exp: datetime
