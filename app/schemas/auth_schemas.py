@@ -6,6 +6,12 @@ from app.enums import RoleEnum
 from .users_schema import UserResponse
 
 
+class RegisterNewUser(BaseModel):
+    username: str
+    password: str
+    email: EmailStr
+
+
 class RegisterUser(BaseModel):
     username: str
     password: str

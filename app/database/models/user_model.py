@@ -26,6 +26,4 @@ class UserModel(BaseModel):
         self.encrypted_password = hashed_password.decode("utf-8")
 
     def check_password(self, password: str) -> bool:
-        return bcrypt.checkpw(
-            password.encode("utf-8"), self.password.encode("utf-8")
-        )
+        return bcrypt.checkpw(password.encode("utf-8"), self.password.encode("utf-8"))

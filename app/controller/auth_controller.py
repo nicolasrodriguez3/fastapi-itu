@@ -1,7 +1,7 @@
 import logging
 
 from app.services import UsersService, AuthService
-from app.schemas import RegisterUser, LoginUser, TokenResponse
+from app.schemas import RegisterNewUser, LoginUser, TokenResponse
 from app.exceptions import (
     BaseHTTPException,
     BadRequest,
@@ -18,7 +18,7 @@ class AuthController:
         self.user_service = UsersService()
         self.auth_service = AuthService()
 
-    def register(self, new_user: RegisterUser) -> TokenResponse:
+    def register(self, new_user: RegisterNewUser) -> TokenResponse:
         try:
             return self.auth_service.register(new_user)
         except BaseHTTPException as ex:

@@ -19,15 +19,16 @@ class JWTMiddleware(BaseHTTPMiddleware):
 
         # Ejecutar el endpoint
         response: Response = await call_next(request)
-        #
+
         if not token or not token.startswith("Bearer "):
             return response
 
+        # Renovar el token
         try:
-            jwt = jwt_handler.decode(token.split("Bearer ")[1])
+            jwt: dict = jwt_handler.decode(token.split("Bearer ")[1])
             expired_timestamp = jwt["exp"]
-            time_left: int = expired_timestamp - int(time.time()) // 60
-            print(expired_timestamp, time_left)
+            time_left: int = int(expired_timestamp) - int(time.time()) // 60
+
             if time_left < (settings.JWT_EXPIRATION_TIME_MINUTES // 2):
                 del jwt["exp"]
                 new_token = jwt_handler.encode(jwt)

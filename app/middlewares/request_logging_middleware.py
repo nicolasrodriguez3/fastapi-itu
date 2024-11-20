@@ -17,10 +17,13 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         # Log the request details
         method = request.method
         url = str(request.url.path)
-        client_ip: str = request.client.host
         query_params = dict(request.query_params)
-        
-         # Obtener el tipo de contenido
+        if request.client:
+            client_ip = str(request.client.host)
+        else:
+            client_ip = "Unknown"
+
+        # Obtener el tipo de contenido
         content_type = request.headers.get("content-type", "")
         raw_body = await request.body()
 
@@ -46,10 +49,8 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
 
         # Calcular tiempo de ejecución
         execution_time = time.perf_counter() - start_time
-        
-        request_info = (
-            f"{client_ip} - {method} {url} {query_params} - {response.status_code} - {execution_time:.2f}s"
-        )
+
+        request_info = f"{client_ip} - {method} {url} {query_params} - {response.status_code} - {execution_time:.2f}s"
         if body:
             request_info += f"\n{str(body)}"
 

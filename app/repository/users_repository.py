@@ -11,6 +11,7 @@ class UsersRepository:
         self.db = database_connection.session
 
     def create(self, new_user_dict: dict) -> dict:
+        print(new_user_dict)
         new_user = UserModel(**new_user_dict)
         self.db.add(new_user)
         try:

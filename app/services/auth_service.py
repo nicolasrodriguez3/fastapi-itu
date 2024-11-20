@@ -1,11 +1,16 @@
 import logging
-from typing import List
 
-from app.schemas import RegisterUser, LoginUser, TokenResponse, UserResponse, NewUserRequest
-from app.exceptions import NotFound, BadRequest
+from app.schemas import (
+    RegisterNewUser,
+    LoginUser,
+    TokenResponse,
+    UserResponse,
+    NewUserRequest,
+)
+from app.exceptions import BadRequest
 from app.repository import UsersRepository
 from app.services import UsersService
-from app.handlers.jwt_handler import jwt_handler
+from app.handlers import jwt_handler
 from app.enums import RoleEnum as Role
 
 logger = logging.getLogger(__name__)
@@ -16,7 +21,7 @@ class AuthService:
         self.user_service = UsersService()
         self.user_repo = UsersRepository()
 
-    def register(self, new_user: RegisterUser) -> TokenResponse:
+    def register(self, new_user: RegisterNewUser) -> TokenResponse:
         new_user_dict = new_user.model_dump()
         new_user_dict.update(role=Role.USER)
         user = self.user_service.create(NewUserRequest(**new_user_dict))
