@@ -8,13 +8,12 @@ from .users_schema import ClaimUserResponse
 class NewClaimRequest(BaseModel):
     description: str = ""
     status: str = "open"
-    user_id: int
 
 
 class ClaimRequest(BaseModel):
     description: str | None = None
     status: str | None = None
-    user_id: int | None = None
+    user_id: int
 
 
 class ClaimResponse(BaseModel):

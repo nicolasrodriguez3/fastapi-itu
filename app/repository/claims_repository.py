@@ -20,9 +20,9 @@ class ClaimsRepository:
         self.db.refresh(new_claim)
         return new_claim.to_dict()
 
-    def get_list(self, limit: int, offset: int) -> List[dict]:
+    def get_list(self, limit: int, offset: int, user_id: int) -> List[dict]:
         claims = (
-            self.db.query(ClaimModel).order_by("id").limit(limit).offset(offset).all()
+            self.db.query(ClaimModel).filter_by(user_id=user_id).order_by("id").limit(limit).offset(offset).all()
         )
         return [claim.to_dict() for claim in claims]
 
