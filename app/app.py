@@ -5,11 +5,13 @@ from fastapi.middleware import Middleware
 from .api import router
 from .database import database_connection, create_table
 from .middlewares import RequestLoggingMiddleware, JWTMiddleware
+from .configs import api_description
 
 api_middlewares = [
     Middleware(RequestLoggingMiddleware),
     Middleware(JWTMiddleware),
 ]
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,18 +22,19 @@ async def lifespan(app: FastAPI):
     database_connection.disconnect()
 
 
-app = FastAPI(lifespan=lifespan, middleware=api_middlewares)
+app = FastAPI(
+    lifespan=lifespan,
+    middleware=api_middlewares,
+    **api_description,
+)
 app.include_router(router)
 
 
 # @app.on_event("startup")
 # async def startup_event():
 #     database_connection.connect()
-    
+
 
 # @app.on_event("shutdown")
 # async def shutdown_event():
 #     database_connection.disconnect()
-    
-
-    
