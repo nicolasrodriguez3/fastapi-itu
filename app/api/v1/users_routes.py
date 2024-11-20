@@ -1,8 +1,10 @@
 from typing import Annotated, List
-from fastapi import APIRouter, Path, Query
+from fastapi import APIRouter, Path, Query, Depends
 
-from app.schemas import NewUserRequest, UserRequest, UserResponse
+from app.schemas import NewUserRequest, UserRequest, UserResponse, DecodedJwt
 from app.controller import UsersController
+from app.dependencies import has_permission
+from app.enums import RoleEnum as Role
 
 router = APIRouter(prefix="/users")
 controller = UsersController()
@@ -33,7 +35,9 @@ async def create(new_claim: NewUserRequest) -> UserResponse:
 async def get_list(
     limit: Annotated[int, Query(ge=1, le=100)] = 10,
     offset: Annotated[int, Query(ge=0)] = 0,
+    token: DecodedJwt = Depends(has_permission([Role.ADMIN])),
 ) -> List[UserResponse]:
+    print(token)
     return controller.get_list(limit, offset)
 
 

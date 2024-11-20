@@ -5,7 +5,7 @@ from app.exceptions import BadRequest
 from app.schemas import RegisterUser, LoginUser, TokenResponse
 from app.controller import AuthController
 
-router = APIRouter(prefix="/users")
+router = APIRouter(prefix="/auth")
 controller = AuthController()
 
 
