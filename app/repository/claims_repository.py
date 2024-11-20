@@ -13,7 +13,6 @@ class ClaimsRepository:
         try:
             self.db.commit()
         except Exception as e:
-            print(e)
             self.db.rollback()
             raise e
 
@@ -22,7 +21,12 @@ class ClaimsRepository:
 
     def get_list(self, limit: int, offset: int, user_id: int) -> List[dict]:
         claims = (
-            self.db.query(ClaimModel).filter_by(user_id=user_id).order_by("id").limit(limit).offset(offset).all()
+            self.db.query(ClaimModel)
+            .filter_by(user_id=user_id)
+            .order_by("id")
+            .limit(limit)
+            .offset(offset)
+            .all()
         )
         return [claim.to_dict() for claim in claims]
 
@@ -38,7 +42,13 @@ class ClaimsRepository:
             return None
         for key, value in new_data.items():
             setattr(claim, key, value)
-        self.db.commit()
+
+        try:
+            self.db.commit()
+        except Exception as e:
+            self.db.rollback()
+            raise e
+
         self.db.refresh(claim)
         return claim.to_dict()
 
@@ -46,8 +56,14 @@ class ClaimsRepository:
         claim = self.__get_one(claim_id)
         if claim is None:
             return False
-        self.db.delete(claim)
-        self.db.commit()
+
+        try:
+            self.db.delete(claim)
+            self.db.commit()
+        except Exception as e:
+            self.db.rollback()
+            raise e
+
         return True
 
     def __get_one(self, claim_id: int) -> ClaimModel | None:
