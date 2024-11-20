@@ -13,7 +13,6 @@ class NewClaimRequest(BaseModel):
 class ClaimRequest(BaseModel):
     description: str | None = None
     status: str | None = None
-    user_id: int
 
 
 class ClaimResponse(BaseModel):

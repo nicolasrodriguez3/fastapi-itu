@@ -63,7 +63,7 @@ async def get_by_id(
 
 @router.patch("/{id}", status_code=200)
 async def update(
-    id: int,
+    id: Annotated[int, Path(ge=1)],
     updated_claim: ClaimRequest,
     token: DecodedJwt = Depends(has_permission(USER_ROLES)),
 ) -> ClaimResponse:
@@ -81,7 +81,7 @@ async def update(
     },
 )
 async def delete(
-    id: int,
+    id: Annotated[int, Path(ge=1)],
     token: DecodedJwt = Depends(has_permission(USER_ROLES)),
 ) -> None:
     controller.delete(id, token)
