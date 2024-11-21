@@ -20,6 +20,7 @@ def config_logger(debug_level: bool):
         when="midnight",
         backupCount=10,
         interval=1,
+        encoding="utf-8"
     )
     handler.suffix = "%Y%m%d"
     
