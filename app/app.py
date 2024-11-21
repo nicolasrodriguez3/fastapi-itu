@@ -3,16 +3,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .api import router
-from .database import database_connection, create_table
+from .database import database_connection, create_tables
 from .middlewares import RequestLoggingMiddleware, JWTMiddleware
 from .configs import api_description
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # if database_connection.connect():
-    #     create_table()
-    database_connection.connect()
+    if database_connection.connect():
+        create_tables()
+    # database_connection.connect()
     yield
     database_connection.disconnect()
 
