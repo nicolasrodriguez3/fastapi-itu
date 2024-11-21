@@ -1,16 +1,11 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from fastapi.middleware import Middleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from .api import router
 from .database import database_connection, create_table
 from .middlewares import RequestLoggingMiddleware, JWTMiddleware
 from .configs import api_description
-
-api_middlewares = [
-    Middleware(RequestLoggingMiddleware),
-    Middleware(JWTMiddleware),
-]
 
 
 @asynccontextmanager
@@ -24,17 +19,18 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     lifespan=lifespan,
-    middleware=api_middlewares,
     **api_description,
 )
 app.include_router(router)
 
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# @app.on_event("startup")
-# async def startup_event():
-#     database_connection.connect()
-
-
-# @app.on_event("shutdown")
-# async def shutdown_event():
-#     database_connection.disconnect()
+app.add_middleware(RequestLoggingMiddleware)
+app.add_middleware(JWTMiddleware)
