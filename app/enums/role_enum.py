@@ -29,3 +29,10 @@ BOSS_ROLES: List[RoleEnum] = [
 ADMIN_ROLES: List[RoleEnum] = [
     RoleEnum.ADMIN,
 ]
+
+ROLE_LEVELS: dict[RoleEnum, int] = {
+    RoleEnum.ADMIN: 1,
+    RoleEnum.BOSS: 2,
+    RoleEnum.EMPLOYEE: 3,
+    RoleEnum.USER: 4
+}

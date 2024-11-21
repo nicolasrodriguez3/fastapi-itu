@@ -8,8 +8,11 @@ from app.exceptions import (
     NotFound,
     UniqueFieldException,
 )
+from app.schemas.auth_schemas import DecodedJwt
 from app.schemas.users_schema import UserRequest, NewUserRequest, UserResponse
 from app.services import UsersService
+
+from app.enums import RoleEnum
 
 
 logger = logging.getLogger(__name__)
@@ -85,6 +88,19 @@ class UsersController:
         except Exception:
             logger.critical(f"Error no contemplado en {__name__}.delete()")
             raise InternalServerError("algo salio mal")
+        
+    def change_role(self, id, new_role: RoleEnum, user: DecodedJwt) -> UserResponse:
+        try:
+            return self.service.change_role(id, new_role, user)
+        except BaseHTTPException as ex:
+            self.__handler_http_exception(ex)
+        except UniqueFieldException as ex:
+            logger.error(str(ex))
+            raise BadRequest("Error: campos duplicados")
+        except Exception as ex:
+            logger.critical(f"Error no contemplado en {__name__}.create()" + str(ex))
+            raise InternalServerError("Algo salio mal")
+        
 
     def __handler_http_exception(self, ex: BaseHTTPException):
         if ex.status_code >= 500:

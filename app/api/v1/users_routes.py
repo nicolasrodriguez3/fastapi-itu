@@ -1,6 +1,7 @@
 from typing import Annotated, List
 from fastapi import APIRouter, Path, Query, Depends
 
+from app.enums import RoleEnum, BOSS_ROLES
 from app.exceptions import NotFound, Unauthorized, Forbidden
 from app.schemas import NewUserRequest, UserRequest, UserResponse, DecodedJwt
 from app.controller import UsersController
@@ -122,3 +123,23 @@ async def delete(
     _: DecodedJwt = Depends(has_permission(ADMIN_ROLES)),
 ) -> None:
     return controller.delete(id)
+
+
+@router.patch(
+    "/{id}/role",
+    status_code=200,
+    responses={
+        201: {"description": "Rol cambiado correctamente"},
+        401: Unauthorized.as_dict(),
+        403: Forbidden.as_dict(),
+        404: NotFound.as_dict(),
+        422: {"description": "ID no es un entero valido"},
+    },
+    description="Cambia el rol de un usuario segun su ID.",
+)
+async def change_role(
+    id: Annotated[int, Path(ge=1)],
+    new_role: RoleEnum,
+    token: DecodedJwt = Depends(has_permission(BOSS_ROLES)),
+) -> UserResponse:
+    return controller.change_role(id, new_role, token)
